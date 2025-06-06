@@ -1,0 +1,73 @@
+<!-- templates/privacy.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="policy-container">
+    <div class="policy-header">
+        <h1>隐私政策</h1>
+        <p>最后更新日期：2025年6月3日</p>
+    </div>
+
+    <div class="policy-content">
+        <section>
+            <h2>1. 我们收集的信息</h2>
+            <p>当您使用FlaskChat服务时，我们可能会收集以下信息：</p>
+            <ul>
+                <li><strong>账户信息：</strong>用户名、加密密码和注册时间</li>
+                <li><strong>聊天内容：</strong>您在聊天室中发送的消息</li>
+                <li><strong>使用数据：</strong>登录时间、访问的聊天室和操作日志</li>
+                <li><strong>设备信息：</strong>IP地址、浏览器类型和操作系统</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>2. 我们如何使用信息</h2>
+            <p>我们收集的信息用于以下目的：</p>
+            <ul>
+                <li>提供、维护和改进我们的服务</li>
+                <li>验证用户身份并保护账户安全</li>
+                <li>监控服务使用情况并分析趋势</li>
+                <li>遵守法律义务和执行我们的服务条款</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>3. 信息共享</h2>
+            <p>我们不会出售您的个人信息。在以下情况下，我们可能会共享信息：</p>
+            <ul>
+                <li>当法律要求或响应法律程序时</li>
+                <li>保护用户或公众免受安全威胁</li>
+                <li>与服务提供商合作（如托管服务）</li>
+                <li>在业务转让或合并的情况下</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>4. 数据安全</h2>
+            <p>我们采取合理的安全措施保护您的信息：</p>
+            <ul>
+                <li>使用bcrypt加密存储用户密码</li>
+                <li>通过HTTPS加密数据传输</li>
+                <li>定期进行安全审计</li>
+                <li>限制员工访问用户数据</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>5. 您的权利</h2>
+            <p>您有权：</p>
+            <ul>
+                <li>访问、更新或删除您的账户信息</li>
+                <li>导出您的聊天数据</li>
+                <li>注销您的账户</li>
+                <li>就隐私问题联系我们</li>
+            </ul>
+        </section>
+
+        <section>
+            <h2>6. 政策变更</h2>
+            <p>我们可能会更新本隐私政策。更新后，我们将在网站上发布通知。</p>
+        </section>
+    </div>
+</div>
+{% endblock %}

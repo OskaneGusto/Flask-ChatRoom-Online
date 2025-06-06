@@ -1,0 +1,22 @@
+flask-chatroom/
+├── app.py                # 主应用文件（已更新）
+├── requirements.txt      # 依赖包列表（已更新）
+├── static/
+│   ├── avatars/           # 头像目录（已更新）
+│   ├── style.css         # 样式表（已更新）
+│   └── script.js         # 客户端脚本（已更新）
+├── templates/
+│   ├── base.html         # 基础模板（需要更新）
+│   ├── home.html         # 新增现代化首页
+│   ├── index.html        # 聊天室主页面（保持不变）
+│   ├── login.html        # 登录页面（保持不变）
+│   ├── contact.html      # 联系我们页面（保持不变）
+│   ├── privacy.html      # 隐私政策页面（保持不变）
+│   ├── terms.html        # 隐私条款页面（保持不变）
+│   ├── profile.html      # 个人资料页面（保持不变）
+│   └── register.html     # 注册页面（保持不变）
+├── database.py           # 新增数据库管理文件
+├── chatroom.db           # 数据库文件
+├── logs/                 # 新增日志目录
+│   └── chatroom.log      # 日志文件
+└── .env                  # 环境变量文件

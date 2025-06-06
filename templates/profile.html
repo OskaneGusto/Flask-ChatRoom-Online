@@ -1,0 +1,197 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="profile-container">
+    <div class="profile-header">
+        <div class="avatar-container">
+            <img src="{{ url_for('static', filename='avatars/' + user.avatar) }}" alt="头像" class="profile-avatar">
+            {% if is_own_profile %}
+            <label for="avatar-upload" class="avatar-upload-label">
+                <i class="bi bi-camera"></i>
+            </label>
+            <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+            {% endif %}
+        </div>
+        <h1>{{ user.username }}</h1>
+        <p class="member-since">成员自 {{ user.created_at|datetimeformat('%Y-%m-%d') }}</p>
+
+        {% if is_own_profile %}
+        <button id="edit-profile-btn" class="btn btn-outline">编辑资料</button>
+        {% endif %}
+    </div>
+
+    <div class="profile-details">
+        <div class="detail-item">
+            <h3>个人简介</h3>
+            <p id="bio-text">{{ user.bio or '这个人很懒，还没有写个人简介...' }}</p>
+            {% if is_own_profile %}
+            <textarea id="bio-edit" class="edit-field" style="display: none;" maxlength="200">{{ user.bio }}</textarea>
+            {% endif %}
+        </div>
+
+        <div class="detail-item">
+            <h3>联系信息</h3>
+            <ul class="contact-info">
+                {% if user.email %}
+                <li><i class="bi bi-envelope"></i> {{ user.email }}</li>
+                {% endif %}
+                {% if user.location %}
+                <li><i class="bi bi-geo-alt"></i> {{ user.location }}</li>
+                {% endif %}
+                {% if user.website %}
+                <li><i class="bi bi-link-45deg"></i> <a href="{{ user.website }}" target="_blank">{{ user.website }}</a></li>
+                {% endif %}
+            </ul>
+
+            {% if is_own_profile %}
+            <div id="contact-edit" style="display: none;">
+                <div class="form-group">
+                    <label for="email-edit">电子邮箱</label>
+                    <input type="email" id="email-edit" class="edit-field" value="{{ user.email or '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="location-edit">所在地</label>
+                    <input type="text" id="location-edit" class="edit-field" value="{{ user.location or '' }}">
+                </div>
+                <div class="form-group">
+                    <label for="website-edit">个人网站</label>
+                    <input type="url" id="website-edit" class="edit-field" value="{{ user.website or '' }}">
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="detail-item">
+            <h3>统计信息</h3>
+            <ul class="stats-list">
+                <li>加入聊天室: <strong>{{ stats.rooms_joined }}</strong> 个</li>
+                <li>发送消息: <strong>{{ stats.messages_sent }}</strong> 条</li>
+                <li>最后活跃: <strong>{{ stats.last_active |datetimeformat('%Y-%m-%d %H:%M') }}</strong></li>
+            </ul>
+        </div>
+    </div>
+
+    {% if is_own_profile %}
+    <div class="profile-actions" id="save-cancel-btns" style="display: none;">
+        <button id="save-profile-btn" class="btn btn-primary">保存更改</button>
+        <button id="cancel-edit-btn" class="btn btn-outline">取消</button>
+    </div>
+    {% endif %}
+</div>
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const editBtn = document.getElementById('edit-profile-btn');
+    const saveBtn = document.getElementById('save-profile-btn');
+    const cancelBtn = document.getElementById('cancel-edit-btn');
+    const bioText = document.getElementById('bio-text');
+    const bioEdit = document.getElementById('bio-edit');
+    const contactInfo = document.querySelector('.contact-info');
+    const contactEdit = document.getElementById('contact-edit');
+    const saveCancelBtns = document.getElementById('save-cancel-btns');
+    const avatarUpload = document.getElementById('avatar-upload');
+
+    if (editBtn) {
+        editBtn.addEventListener('click', function() {
+            // 显示编辑区域
+            bioText.style.display = 'none';
+            bioEdit.style.display = 'block';
+            contactInfo.style.display = 'none';
+            contactEdit.style.display = 'block';
+            saveCancelBtns.style.display = 'flex';
+            editBtn.style.display = 'none';
+        });
+    }
+
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', function() {
+            // 取消编辑，恢复原状
+            bioText.style.display = 'block';
+            bioEdit.style.display = 'none';
+            contactInfo.style.display = 'block';
+            contactEdit.style.display = 'none';
+            saveCancelBtns.style.display = 'none';
+            editBtn.style.display = 'block';
+            // 重置文本
+            bioEdit.value = "{{ user.bio or '' }}";
+            document.getElementById('email-edit').value = "{{ user.email or '' }}";
+            document.getElementById('location-edit').value = "{{ user.location or '' }}";
+            document.getElementById('website-edit').value = "{{ user.website or '' }}";
+        });
+    }
+
+    if (saveBtn) {
+        saveBtn.addEventListener('click', function() {
+            const newBio = bioEdit.value;
+            const newEmail = document.getElementById('email-edit').value;
+            const newLocation = document.getElementById('location-edit').value;
+            const newWebsite = document.getElementById('website-edit').value;
+
+            // 发送AJAX请求更新个人资料
+            fetch("{{ url_for('update_profile') }}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    bio: newBio,
+                    email: newEmail,
+                    location: newLocation,
+                    website: newWebsite
+                })
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // 更新页面显示
+                    bioText.textContent = newBio || '这个人很懒，还没有写个人简介...';
+                    bioText.style.display = 'block';
+                    bioEdit.style.display = 'none';
+
+                    // 更新联系信息
+                    const emailItem = newEmail ? `<li><i class="bi bi-envelope"></i> ${newEmail}</li>` : '';
+                    const locationItem = newLocation ? `<li><i class="bi bi-geo-alt"></i> ${newLocation}</li>` : '';
+                    const websiteItem = newWebsite ? `<li><i class="bi bi-link-45deg"></i> <a href="${newWebsite}" target="_blank">${newWebsite}</a></li>` : '';
+
+                    contactInfo.innerHTML = emailItem + locationItem + websiteItem || '<li>暂无联系信息</li>';
+                    contactInfo.style.display = 'block';
+                    contactEdit.style.display = 'none';
+
+                    saveCancelBtns.style.display = 'none';
+                    editBtn.style.display = 'block';
+                } else {
+                    alert('更新失败: ' + data.message);
+                }
+            });
+        });
+    }
+
+    if (avatarUpload) {
+        avatarUpload.addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('avatar', file);
+
+                fetch("{{ url_for('update_avatar') }}", {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // 更新头像显示
+                        document.querySelector('.profile-avatar').src =
+                            "{{ url_for('static', filename='avatars/') }}" + data.filename;
+                    } else {
+                        alert('头像上传失败: ' + data.message);
+                    }
+                });
+            }
+        });
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}

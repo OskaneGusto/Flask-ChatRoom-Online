@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="chat-container">
+    <div class="sidebar">
+        <div class="room-list">
+            <h3>聊天室</h3>
+            <ul id="room-list">
+                {% for room in rooms %}
+                    <li><a href="#" class="room-link" data-room="{{ room }}">#{{ room }}</a></li>
+                {% endfor %}
+            </ul>
+            <div class="create-room">
+                <input type="text" id="new-room-name" placeholder="创建新聊天室...">
+                <button id="create-room-btn">+</button>
+            </div>
+        </div>
+        
+        <div class="user-list">
+            <h3>在线用户 (<span id="user-count">0</span>)</h3>
+            <ul id="current-users"></ul>
+        </div>
+    </div>
+    
+    <div class="chat-area">
+        <div class="chat-header">
+            <h2 id="current-room">#general</h2>
+        </div>
+        
+        <div class="messages" id="messages">
+            <div class="system-message">
+                <p>欢迎来到 #general 聊天室！</p>
+            </div>
+        </div>
+        
+        <div class="message-input">
+            <textarea id="message-input" placeholder="输入消息..."></textarea>
+            <button id="send-btn">发送</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+{% endblock %}

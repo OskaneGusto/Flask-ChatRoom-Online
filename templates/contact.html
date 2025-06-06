@@ -1,0 +1,140 @@
+<!-- templates/contact.html -->
+{% extends "base.html" %}
+
+{% block content %}
+<div class="contact-container">
+    <div class="contact-header">
+        <h1>联系我们</h1>
+        <p>我们很乐意听取您的反馈、问题或建议</p>
+    </div>
+
+    <div class="contact-content">
+        <div class="contact-info">
+            <div class="info-card">
+                <div class="icon">
+                    <i class="bi bi-envelope"></i>
+                </div>
+                <h3>电子邮件</h3>
+                <p>support@flaskchat.com</p>
+                <p>一般咨询：info@flaskchat.com</p>
+            </div>
+
+            <div class="info-card">
+                <div class="icon">
+                    <i class="bi bi-geo-alt"></i>
+                </div>
+                <h3>办公地址</h3>
+                <p>北京市海淀区中关村科技园</p>
+                <p>创新大厦A座15层</p>
+                <p>邮编：100080</p>
+            </div>
+
+            <div class="info-card">
+                <div class="icon">
+                    <i class="bi bi-clock"></i>
+                </div>
+                <h3>工作时间</h3>
+                <p>周一至周五：9:00 - 18:00</p>
+                <p>周六：10:00 - 16:00</p>
+                <p>周日：休息</p>
+            </div>
+        </div>
+
+        <div class="contact-form-container">
+            <h2>发送消息</h2>
+            <form class="contact-form" method="POST">
+                <div class="form-group">
+                    <label for="name">姓名</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">电子邮件</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="subject">主题</label>
+                    <input type="text" id="subject" name="subject" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="message">消息</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+
+                <button type="submit">发送消息</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="faq-section">
+        <h2>常见问题</h2>
+        <div class="faq-list">
+            <div class="faq-item">
+                <h3>如何重置密码？<i class="bi bi-chevron-down"></i></h3>
+                <div class="faq-answer">
+                    <p>在登录页面点击"忘记密码"链接，输入您的电子邮件地址，我们将发送密码重置说明。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3>可以删除我的账户吗？<i class="bi bi-chevron-down"></i></h3>
+                <div class="faq-answer">
+                    <p>是的，在账户设置中您可以找到删除账户选项。请注意，账户删除后所有数据将被永久移除。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3>如何创建新的聊天室？<i class="bi bi-chevron-down"></i></h3>
+                <div class="faq-answer">
+                    <p>在聊天界面左侧边栏底部，输入新聊天室名称并点击"+"按钮即可创建新聊天室。</p>
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <h3>消息历史保存多久？<i class="bi bi-chevron-down"></i></h3>
+                <div class="faq-answer">
+                    <p>我们保存所有聊天消息30天，之后会自动删除。您可以在设置中导出聊天记录。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // FAQ展开/折叠功能
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach(item => {
+        const header = item.querySelector('h3');
+        header.addEventListener('click', () => {
+            item.classList.toggle('active');
+        });
+    });
+
+    // 表单提交处理
+    const contactForm = document.querySelector('.contact-form');
+    if (contactForm) {
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // 这里可以添加表单验证逻辑
+            const formData = {
+                name: this.name.value,
+                email: this.email.value,
+                subject: this.subject.value,
+                message: this.message.value
+            };
+
+            // 模拟表单提交
+            alert('感谢您的留言！我们会尽快回复您。');
+            this.reset();
+        });
+    }
+});
+</script>
+{% endblock %}
+{% endblock %}
